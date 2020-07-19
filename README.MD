@@ -1,4 +1,4 @@
-# Django 로그인, 회원가입 API
+# Django Rest Framework 로그인, 회원가입 API
 
 
 ## HTTPie 를 활용한 예시
