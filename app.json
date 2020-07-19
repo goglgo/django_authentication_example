@@ -1,7 +1,7 @@
 {
-    "name": "Django Login Server Example",
+    "name": "Django Login Server Example With ReST API",
     "description": "A Example of Login / Signup ",
-    "repository": "https://github.com/goglgo/Django_LoginServer_Example",
+    "repository": "https://github.com/goglgo/django_authentication_example",
     "keywords": ["django", "signin", "signup"],
     "scripts": {
         "postdeploy": "python manage.py migrate"
