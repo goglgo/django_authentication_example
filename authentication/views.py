@@ -4,6 +4,9 @@ from rest_framework import permissions
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from .serializers import RegistrationUserSerializer
+from django.contrib.auth.models import update_last_login
+from rest_framework.authtoken.views import ObtainAuthToken
+from django.contrib.auth import get_user_model
 
 
 # POST 로 데이터를 받을 것임을 명시해준다.
@@ -34,10 +37,12 @@ def registration_view(request):
             data['email'] = account.email
             data['username'] = account.username
             token = Token.objects.get(user=account).key
+            print(token)
             data['token'] = token
 
         else:
             data = serializer.errors
+        print('done!!!!!!!!!!')
         return Response(data)
 
 
@@ -47,6 +52,24 @@ def registration_view(request):
 def example_view(request, format=None):
     content = {
         'user': str(request.user),
+        'userRole':request.user.RoleUser.userType,
         'result':'Authenticated'
     }
     return Response(content)
+
+
+
+
+# 토큰 취득시, last_login을 업데이트 해준다.
+class TokenAuthenticationView(ObtainAuthToken):
+    """Implementation of ObtainAuthToken with last_login update"""
+    
+    def post(self, request):
+        result = super(TokenAuthenticationView, self).post(request)
+        currentUserModel = get_user_model()
+        try:
+            user = currentUserModel.objects.get(username=request.data['username'])
+            update_last_login(None, user)
+        except Exception as exc:
+            return None
+        return result
